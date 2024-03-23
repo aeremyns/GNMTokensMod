@@ -23,14 +23,23 @@ namespace GNMTokens
 		public override void Entry(IModHelper helper)
 		{
 			helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+			helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 			this.Config = this.Helper.ReadConfig<ModConfig>();
 		}
 
 		/*********
 		** Private methods
 		*********/
-		private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+		private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
 		{
+            if (Config.Enabled)
+			{ 
+				Game1.player.Gender = Gender.Undefined; 
+			}	
+        }
+
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+		{	
 			var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
 			
 			//check if Content Patcher API is available
@@ -183,9 +192,16 @@ namespace GNMTokens
 					reset: () => this.Config = new ModConfig(),
 					save: () => this.Helper.WriteConfig(this.Config)
 				);
-
-			//Add Section Title + Options
-			configMenu.AddSectionTitle
+            configMenu.AddBoolOption
+                (
+                    mod: this.ModManifest,
+                    name: () => "Enabled",
+                    tooltip: () => "Enabled or Disable the use of customized language.",
+                    getValue: () => this.Config.Enabled,
+                    setValue: value => this.Config.Enabled = value
+                );
+            //Add Section Title + Options
+            configMenu.AddSectionTitle
 				(
 					mod: this.ModManifest,
 					text: () => "Language and Pronoun Options"

@@ -8,6 +8,7 @@ namespace GNMTokens
 {
     class ModConfig
     {
+        public bool Enabled { get; set; } = true;
         public bool Singular { get; set; } = false;
         public string SubjectivePronoun { get; set; } = "They";
         public string ObjectivePronoun { get; set; } = "Them";
