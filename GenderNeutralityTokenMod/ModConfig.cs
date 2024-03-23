@@ -8,7 +8,6 @@ namespace GNMTokens
 {
     class ModConfig
     {
-        public bool Enabled { get; set; } = true;
         public bool Singular { get; set; } = false;
         public string SubjectivePronoun { get; set; } = "They";
         public string ObjectivePronoun { get; set; } = "Them";
@@ -27,5 +26,6 @@ namespace GNMTokens
         public string ServiceFormalNoun { get; set; } = "Esteemed Patron";
         public string TraderNoun { get; set; } = "Traveller";
         public string ParentalNoun { get; set; } = "Parent";
+        public string Gender { get; set; } = "Undefined";
     }
 }

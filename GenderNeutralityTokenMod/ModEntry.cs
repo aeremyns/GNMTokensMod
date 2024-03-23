@@ -27,15 +27,27 @@ namespace GNMTokens
 			this.Config = this.Helper.ReadConfig<ModConfig>();
 		}
 
-		/*********
+        /*********
 		** Private methods
 		*********/
-		private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
 		{
-            if (Config.Enabled)
-			{ 
-				Game1.player.Gender = Gender.Undefined; 
-			}	
+            if (Config.Gender == "Undefined")
+            {
+                Game1.player.Gender = Gender.Undefined;
+            }
+            else if (Config.Gender == "Male")
+            {
+                Game1.player.Gender = Gender.Male;
+            }
+            else if (Config.Gender == "Female")
+            {
+                Game1.player.Gender = Gender.Female;
+            }
+            else
+            {
+                Game1.player.Gender = Gender.Undefined;
+            };
         }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -190,15 +202,17 @@ namespace GNMTokens
 				(
 					mod: this.ModManifest,
 					reset: () => this.Config = new ModConfig(),
-					save: () => this.Helper.WriteConfig(this.Config)
+					save: () => this.Helper.WriteConfig(this.Config),
+					titleScreenOnly: true
 				);
-            configMenu.AddBoolOption
+            configMenu.AddTextOption
                 (
                     mod: this.ModManifest,
-                    name: () => "Enabled",
-                    tooltip: () => "Enabled or Disable the use of customized language.",
-                    getValue: () => this.Config.Enabled,
-                    setValue: value => this.Config.Enabled = value
+                    name: () => "Gender",
+                    tooltip: () => "Choose which gendered language to use. Use Undefined for custom language.",
+                    getValue: () => this.Config.Gender,
+                    setValue: value => this.Config.Gender = value,
+					allowedValues: new string[] { "Undefined", "Male", "Female" }
                 );
             //Add Section Title + Options
             configMenu.AddSectionTitle
