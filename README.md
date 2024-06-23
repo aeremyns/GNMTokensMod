@@ -20,6 +20,7 @@ List of currently available Tokens and their default values:
         ServiceFormalNoun: "Esteemed Patron"
         TraderNoun: "Traveller"
         ParentalNoun: "Parent"
+        TermOfEndearment: "Sweetie"
 ```
 
 To use the tokens from this mod add this mod as a dependency to your content patcher mod.
