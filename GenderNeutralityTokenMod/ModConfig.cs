@@ -26,6 +26,8 @@ namespace GNMTokens
         public string ServiceFormalNoun { get; set; } = "Esteemed Patron";
         public string TraderNoun { get; set; } = "Traveller";
         public string ParentalNoun { get; set; } = "Parent";
-        public string Gender { get; set; } = "Undefined";
+        public string TermOfEndearment { get; set; } = "Sweetie";
+        //Code for next release
+        //public string Gender { get; set; } = "Undefined";
     }
 }
