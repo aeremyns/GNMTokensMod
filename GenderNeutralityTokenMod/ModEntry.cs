@@ -23,14 +23,38 @@ namespace GNMTokens
 		public override void Entry(IModHelper helper)
 		{
 			helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+			//Code for next release
+			//helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 			this.Config = this.Helper.ReadConfig<ModConfig>();
 		}
 
-		/*********
+        /*********
 		** Private methods
 		*********/
-		private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        
+		/* Code for next release
+		private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
 		{
+            if (Config.Gender == "Undefined")
+            {
+                Game1.player.Gender = Gender.Undefined;
+            }
+            else if (Config.Gender == "Male")
+            {
+                Game1.player.Gender = Gender.Male;
+            }
+            else if (Config.Gender == "Female")
+            {
+                Game1.player.Gender = Gender.Female;
+            }
+            else
+            {
+                Game1.player.Gender = Gender.Undefined;
+            };
+        }
+		*/
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+		{	
 			var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
 			
 			//check if Content Patcher API is available
@@ -164,13 +188,20 @@ namespace GNMTokens
 						return new[] { this.Config.ParentalNoun };
 					}
 				);
+            api.RegisterToken
+                (
+                    this.ModManifest, "TermOfEndearment", () =>
+                    {
+                        return new[] { this.Config.TermOfEndearment };
+                    }
+                );
 
 
 
 
 
-			//Get Generic Mod Config Menu's API (if it's installed)
-			var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
+            //Get Generic Mod Config Menu's API (if it's installed)
+            var configMenu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
 			
 			//check if GNCM API is available
 			if (configMenu is null)
@@ -181,11 +212,21 @@ namespace GNMTokens
 				(
 					mod: this.ModManifest,
 					reset: () => this.Config = new ModConfig(),
-					save: () => this.Helper.WriteConfig(this.Config)
+					save: () => this.Helper.WriteConfig(this.Config),
+					titleScreenOnly: true
 				);
-
-			//Add Section Title + Options
-			configMenu.AddSectionTitle
+            /* Code for next release
+			configMenu.AddTextOption
+                (
+                    mod: this.ModManifest,
+                    name: () => "Gender",
+                    tooltip: () => "Choose which gendered language to use. Use Undefined for custom language.",
+                    getValue: () => this.Config.Gender,
+                    setValue: value => this.Config.Gender = value,
+					allowedValues: new string[] { "Undefined", "Male", "Female" }
+                );*/
+            //Add Section Title + Options
+            configMenu.AddSectionTitle
 				(
 					mod: this.ModManifest,
 					text: () => "Language and Pronoun Options"
@@ -329,11 +370,19 @@ namespace GNMTokens
 			configMenu.AddTextOption
 				(
 					mod: this.ModManifest,
-					name: () => "ParentNoun",
+					name: () => "ParentalNoun",
 					tooltip: () => "The noun used by those who feel a parent/child relationship with you. (i.e. Father, Mother, Parent, etc.)",
 					getValue: () => this.Config.ParentalNoun,
 					setValue: value => this.Config.ParentalNoun = value
-				); ;
-		}
+				);
+            configMenu.AddTextOption
+                (
+                    mod: this.ModManifest,
+                    name: () => "TermOfEndearment",
+                    tooltip: () => "The word used by those who are very close to you, like your spouse. (i.e. Sweetie, Pookie, etc.)",
+                    getValue: () => this.Config.ParentalNoun,
+                    setValue: value => this.Config.ParentalNoun = value
+                ); ;
+        }
 	}
 }
