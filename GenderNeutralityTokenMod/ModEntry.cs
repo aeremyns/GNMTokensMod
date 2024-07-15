@@ -24,18 +24,20 @@ namespace GNMTokens
 		{
 			helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 			//Code for next release
-			//helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+			/*helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+			helper.Events.GameLoop.Saving += this.OnSaving;
+			helper.Events.GameLoop.SaveCreating += this.OnSaveCreating;*/
 			this.Config = this.Helper.ReadConfig<ModConfig>();
 		}
 
-        /*********
+		/*********
 		** Private methods
 		*********/
-        
-		/* Code for next release
-		private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+
+		//Code for next release
+		/*private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
 		{
-            if (Config.Gender == "Undefined")
+            if (Config.Gender == "Nonbinary (They/Them)")
             {
                 Game1.player.Gender = Gender.Undefined;
             }
@@ -52,7 +54,45 @@ namespace GNMTokens
                 Game1.player.Gender = Gender.Undefined;
             };
         }
-		*/
+        private void OnSaving(object sender, EventArgs e)
+        {
+            if (Config.Gender == "Nonbinary (They/Them)")
+            {
+                Game1.player.Gender = Gender.Undefined;
+            }
+            else if (Config.Gender == "Male")
+            {
+                Game1.player.Gender = Gender.Male;
+            }
+            else if (Config.Gender == "Female")
+            {
+                Game1.player.Gender = Gender.Female;
+            }
+            else
+            {
+                Game1.player.Gender = Gender.Undefined;
+            };
+        }
+        private void OnSaveCreating(object sender, EventArgs e)
+        {
+            if (Config.Gender == "Nonbinary (They/Them)")
+            {
+                Game1.player.Gender = Gender.Undefined;
+            }
+            else if (Config.Gender == "Male")
+            {
+                Game1.player.Gender = Gender.Male;
+            }
+            else if (Config.Gender == "Female")
+            {
+                Game1.player.Gender = Gender.Female;
+            }
+            else
+            {
+                Game1.player.Gender = Gender.Undefined;
+            };
+        }*/
+
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
 		{	
 			var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
@@ -195,6 +235,13 @@ namespace GNMTokens
                         return new[] { this.Config.TermOfEndearment };
                     }
                 );
+            api.RegisterToken
+                (
+                    this.ModManifest, "SiblingNoun", () =>
+                    {
+                        return new[] { this.Config.SiblingNoun };
+                    }
+                );
 
 
 
@@ -212,18 +259,17 @@ namespace GNMTokens
 				(
 					mod: this.ModManifest,
 					reset: () => this.Config = new ModConfig(),
-					save: () => this.Helper.WriteConfig(this.Config),
-					titleScreenOnly: true
+					save: () => this.Helper.WriteConfig(this.Config)
 				);
-            /* Code for next release
-			configMenu.AddTextOption
+            //Code for next release
+			/*configMenu.AddTextOption
                 (
                     mod: this.ModManifest,
                     name: () => "Gender",
                     tooltip: () => "Choose which gendered language to use. Use Undefined for custom language.",
                     getValue: () => this.Config.Gender,
                     setValue: value => this.Config.Gender = value,
-					allowedValues: new string[] { "Undefined", "Male", "Female" }
+					allowedValues: new string[] { "Nonbinary (They/Them)", "Custom", "Male", "Female"  }
                 );*/
             //Add Section Title + Options
             configMenu.AddSectionTitle
@@ -380,8 +426,16 @@ namespace GNMTokens
                     mod: this.ModManifest,
                     name: () => "TermOfEndearment",
                     tooltip: () => "The word used by those who are very close to you, like your spouse. (i.e. Sweetie, Pookie, etc.)",
-                    getValue: () => this.Config.ParentalNoun,
-                    setValue: value => this.Config.ParentalNoun = value
+                    getValue: () => this.Config.TermOfEndearment,
+                    setValue: value => this.Config.TermOfEndearment = value
+                );
+            configMenu.AddTextOption
+                (
+                    mod: this.ModManifest,
+                    name: () => "SiblingNoun",
+                    tooltip: () => "The word used by those who are your siblings or siblings-in-law. (i.e. Brother, Sister, Sibling, etc.)",
+                    getValue: () => this.Config.SiblingNoun,
+                    setValue: value => this.Config.SiblingNoun = value
                 ); ;
         }
 	}
