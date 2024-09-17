@@ -24,9 +24,9 @@ namespace GNMTokens
 		{
 			helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 			//Code for next release
-			/*helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+			helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 			helper.Events.GameLoop.Saving += this.OnSaving;
-			helper.Events.GameLoop.SaveCreating += this.OnSaveCreating;*/
+			helper.Events.GameLoop.SaveCreating += this.OnSaveCreating;
 			this.Config = this.Helper.ReadConfig<ModConfig>();
 		}
 
@@ -35,7 +35,7 @@ namespace GNMTokens
 		*********/
 
 		//Code for next release
-		/*private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+		private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
 		{
             if (Config.Gender == "Nonbinary (They/Them)")
             {
@@ -91,7 +91,7 @@ namespace GNMTokens
             {
                 Game1.player.Gender = Gender.Undefined;
             };
-        }*/
+        }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
 		{	
@@ -101,8 +101,15 @@ namespace GNMTokens
 			if (api is null)
 				return;
 
-			//Register Content Patcher Tokens for the GNM
-			api.RegisterToken
+            //Register Content Patcher Tokens for the GNM
+            api.RegisterToken
+                (
+                    this.ModManifest, "Gender", () =>
+                    {
+                        return new[] { this.Config.Gender };
+                    }
+                );
+            api.RegisterToken
 				(
 					this.ModManifest, "Singular", () =>
 					{
@@ -127,7 +134,7 @@ namespace GNMTokens
 				(
 					this.ModManifest, "PossessivePronoun", () =>
 					{
-						return new[] { this.Config.PosessivePronoun };
+						return new[] { this.Config.PossessivePronoun };
 					}
 				);
 			api.RegisterToken
@@ -262,7 +269,7 @@ namespace GNMTokens
 					save: () => this.Helper.WriteConfig(this.Config)
 				);
             //Code for next release
-			/*configMenu.AddTextOption
+			configMenu.AddTextOption
                 (
                     mod: this.ModManifest,
                     name: () => "Gender",
@@ -270,7 +277,7 @@ namespace GNMTokens
                     getValue: () => this.Config.Gender,
                     setValue: value => this.Config.Gender = value,
 					allowedValues: new string[] { "Nonbinary (They/Them)", "Custom", "Male", "Female"  }
-                );*/
+                );
             //Add Section Title + Options
             configMenu.AddSectionTitle
 				(
@@ -306,8 +313,8 @@ namespace GNMTokens
 					mod: this.ModManifest,
 					name: () => "PosessivePronoun",
 					tooltip: () => "The posessive pronoun to use. (i.e. His, Her, Their, etc.)",
-					getValue: () => this.Config.PosessivePronoun,
-					setValue: value => this.Config.PosessivePronoun = value
+					getValue: () => this.Config.PossessivePronoun,
+					setValue: value => this.Config.PossessivePronoun = value
 				);
 			configMenu.AddTextOption
 				(

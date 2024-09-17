@@ -11,7 +11,7 @@ namespace GNMTokens
         public bool Singular { get; set; } = false;
         public string SubjectivePronoun { get; set; } = "They";
         public string ObjectivePronoun { get; set; } = "Them";
-        public string PosessivePronoun { get; set; } = "Their";
+        public string PossessivePronoun { get; set; } = "Their";
         public string Title { get; set; } = "Mx.";
         public string Adjective { get; set; } = "Gorgeous";
         public string SpouseNoun { get; set; } = "Partner";
@@ -29,6 +29,6 @@ namespace GNMTokens
         public string TermOfEndearment { get; set; } = "Sweetie";
         public string SiblingNoun { get; set; } = "Sibling";
         //Code for next release
-        //public string Gender { get; set; } = "Nonbinary (They/Them)";
+        public string Gender { get; set; } = "Nonbinary (They/Them)";
     }
 }
